@@ -6,12 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import once2go.com.musicplayer.MusicPlayerApplication;
 import once2go.com.musicplayer.R;
+import once2go.com.musicplayer.controller.UIActionsListener;
 
 /**
  * Created by once2go on 27.02.16.
  */
-public class PlayerControlsFragment extends Fragment{
+public class PlayerControlsFragment extends Fragment implements View.OnClickListener {
+
+    private UIActionsListener uiActionsListener;
 
     public static PlayerControlsFragment getInstance() {
         PlayerControlsFragment fragment = new PlayerControlsFragment();
@@ -29,10 +33,26 @@ public class PlayerControlsFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.random_play_list_layout, container, false);
-
-
+        final View v = inflater.inflate(R.layout.player_controls_view, container, false);
+        v.findViewById(R.id.control_panel_next).setOnClickListener(this);
+        v.findViewById(R.id.control_panel_play).setOnClickListener(this);
+        v.findViewById(R.id.control_panel_prev).setOnClickListener(this);
+        uiActionsListener = MusicPlayerApplication.getInstance().getPlayerController().getUiActionsListener();
         return v;
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.control_panel_next:
+                uiActionsListener.next();
+                break;
+            case R.id.control_panel_play:
+                uiActionsListener.play();
+                break;
+            case R.id.control_panel_prev:
+                uiActionsListener.previous();
+                break;
+        }
+    }
 }
